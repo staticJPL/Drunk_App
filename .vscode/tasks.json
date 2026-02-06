@@ -1,0 +1,91 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Pi: Build drunk_app (Clang ASan+UBSan)",
+      "type": "shell",
+      "command": "bash",
+      "args": [
+        "-lc",
+        "cd /mnt/c/dev/Drunk_App && rsync -az --delete --exclude .clang-tidy --exclude build --exclude build-wsl --exclude .git -e \"ssh -i /home/taticjpl/.ssh/id_ed25519_nopass\" ./ pi@192.168.0.64:/home/pi/Drunk_App/ && ssh -i /home/taticjpl/.ssh/id_ed25519_nopass pi@192.168.0.64 -- bash -lc \"hostname; cd /home/pi/Drunk_App && cmake -S . -B build-clang-asan -DCMAKE_BUILD_TYPE=Debug -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ -DDRUNK_ENABLE_ASAN=ON -DDRUNK_ENABLE_UBSAN=ON && cmake --build build-clang-asan -j\""
+      ],
+      "problemMatcher": []
+    },
+  
+    {
+      "label": "Pi: Build drunk_app (GCC Debug)",
+      "type": "shell",
+      "command": "bash",
+      "args": [
+        "-lc",
+        "cd /mnt/c/dev/Drunk_App && rsync -az --delete --exclude .clang-tidy --exclude build --exclude build-wsl --exclude .git -e \"ssh -i /home/taticjpl/.ssh/id_ed25519_nopass\" ./ pi@192.168.0.64:/home/pi/Drunk_App/ && ssh -i /home/taticjpl/.ssh/id_ed25519_nopass pi@192.168.0.64 -- bash -lc \"hostname; cd /home/pi/Drunk_App && cmake -S . -B build-debug -DCMAKE_BUILD_TYPE=Debug && cmake --build build-debug -j\""
+      ],
+      "problemMatcher": []
+    },
+    {
+      "label": "Pi: Build drunk_app (GCC Release)",
+      "type": "shell",
+      "command": "bash",
+      "args": [
+        "-lc",
+        "cd /mnt/c/dev/Drunk_App && rsync -az --delete --exclude .clang-tidy --exclude build --exclude build-wsl --exclude .git -e \"ssh -i /home/taticjpl/.ssh/id_ed25519_nopass\" ./ pi@192.168.0.64:/home/pi/Drunk_App/ && ssh -i /home/taticjpl/.ssh/id_ed25519_nopass pi@192.168.0.64 -- bash -lc \"hostname; cd /home/pi/Drunk_App && cmake -S . -B build-release -DCMAKE_BUILD_TYPE=Release && cmake --build build-release -j\""
+      ],
+      "problemMatcher": []
+    },
+    {
+      "label": "Pi: Build drunk_app (Default)",
+      "type": "shell",
+      "command": "bash",
+      "args": [
+        "-lc",
+        "cd /mnt/c/dev/Drunk_App && rsync -az --delete --exclude .clang-tidy --exclude build --exclude build-wsl --exclude .git -e \"ssh -i /home/taticjpl/.ssh/id_ed25519_nopass\" ./ pi@192.168.0.64:/home/pi/Drunk_App/ && ssh -i /home/taticjpl/.ssh/id_ed25519_nopass pi@192.168.0.64 -- bash -lc \"hostname; cd /home/pi/Drunk_App && cmake -S . -B build && cmake --build build -j\""
+      ],
+
+      "problemMatcher": [],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    },
+    {
+      "label": "Pi: Run drunk_app (Build)",
+      "type": "shell",
+      "command": "bash",
+      "args": [
+        "-lc",
+        "ssh -i ~/.ssh/id_ed25519_nopass pi@192.168.0.64 \"cd /home/pi/Drunk_App && ./build/drunk_app\""
+      ],
+
+      "problemMatcher": [],
+      "group": {
+        "kind": "test",
+        "isDefault": true
+      }
+    },
+    {
+      "label": "Pi: Run drunk_app (Debug)",
+      "type": "shell",
+      "command": "bash",
+      "args": [
+        "-lc",
+        "ssh -i ~/.ssh/id_ed25519_nopass pi@192.168.0.64 \"cd /home/pi/Drunk_App && ./build-debug/drunk_app\""
+      ],
+
+      "problemMatcher": [],
+      "group": {
+        "kind": "test",
+        "isDefault": true
+      }
+    },    
+    {
+      "label": "Pi: Kill drunk_app",
+      "type": "shell",
+      "command": "bash",
+      "args": [
+        "-lc",
+        "ssh -i ~/.ssh/id_ed25519_nopass pi@192.168.0.64 \"pkill -SIGTERM drunk_app; sleep 0.3; pgrep drunk_app >/dev/null && pkill -9 drunk_app || true\""
+      ],
+      "problemMatcher": []
+    }
+  ]
+}

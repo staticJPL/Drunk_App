@@ -1,0 +1,13 @@
+ASAN_OPTIONS=halt_on_error=1:abort_on_error=1:detect_leaks=1 UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1 ./build-clang-asan/drunk_app
+readelf -d build-clang-asan/drunk_app | grep NEEDED
+nm -a build-clang-asan/drunk_app | grep -E '__asan_|__ubsan_' | head -n 20 // Determine symbols inside the binary. ASan baked in it seems.
+
+nm → “what symbols/functions are inside this binary?”
+
+readelf -d → “what shared libs does this binary need at runtime?”
+
+| grep ... → “filter down to just what I care about”
+
+head -n ... → “don’t flood my terminal”
+
+2>&1 → “include error output in the pipe too”
