@@ -4,7 +4,7 @@
 
 A party-grade breathalyzer application built with modern C++20. It's example embedded system with lock-free concurrent algorithms, and real-time signal processing.
 
-![[C++ BreathAnalyzer/MQ3_Jug.jpg]]
+![MQ-3 calibration jug](resources/MQ3_Jug.jpg)
 
 ## Project Overview
 
@@ -34,9 +34,9 @@ I've provided a circuit diagram link below:
 
 https://app.cirkitdesigner.com/project/94680322-f44f-4e0e-a75f-f59af580681c
 
-![[C++ BreathAnalyzer/circuit_image.svg]]
+![MQ-3 Circuit Diagram](resources/circuit_image.svg)
 
-Notes: I didn't use a MQ3 module as per the diagram. I cut a square piece from a protype board and soldered the MQ3 sensor onto it. As per the image with the 5 gallon jug, I attached the sensor with the board into hole of the cap taped around it to seal it. This allowed me to jerry rig the sensor with the cap onto jug and seal it after adding alcohol inside. 
+Notes: I didn't use a MQ3 module as per the diagram. I cut a square piece from a prototype board and soldered the MQ3 sensor onto it. As per the image with the 5 gallon jug, I attached the sensor with the board into hole of the cap taped around it to seal it. This allowed me to jerry rig the sensor with the cap onto jug and seal it after adding alcohol inside. 
 ### GPIO Pin Mapping
 
 ```cpp
@@ -50,8 +50,8 @@ GPIO 16 → Red LED    (Drunk - BAC ≥ 0.08%)
 
 ## Architecture
 ### System Overview
+![Data Processing Pipeline](resources/pipeline.svg)
 
-![[C++ BreathAnalyzer/pipeline.svg]]
 ### Signal Processing Pipeline
 
 1. **Sampling** (128 Hz fixed rate using `sleep_until`)
@@ -207,7 +207,7 @@ ls -l /dev/gpiochip*
 
 The calibration process was based on fitting a custom regression line using the manufacturer’s sensitivity curve (see datasheet figure below)..
 
-![[C++ BreathAnalyzer/LogRegression.png]]
+![Log-Log Regression Fit](resources/LogRegression.png)
 
 To anchor the regression, I selected an initial calibration point where the sensor ratio **Rs/Ro = 1**. According to the datasheet graph, this corresponds to approximately:
 
