@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="840" viewBox="0 0 1600 917.788" role="img" aria-label="Pretty pipeline diagram left-anchored without squishing, with arrow labels above arrows" preserveAspectRatio="xMinYMin">
+  <defs>
+    <style>
+      .tTitle{font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial; font-size:22px; font-weight:760; fill:#0b1220}
+      .tSub{font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial; font-size:16px; font-weight:650; fill:#0b1220; opacity:.92}
+      .tHint{font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial; font-size:14px; font-weight:850; fill:#0b1220; letter-spacing:.2px}
+      .tSmall{font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial; font-size:12px; font-weight:740; fill:#0b1220; opacity:.90}
+      .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; font-size:13px; font-weight:760; fill:#0b1220}
+      .stroke{stroke:#0b1220; stroke-width:2.5}
+      .wire{stroke:#0b1220; stroke-width:3.6; fill:none; stroke-linecap:round; stroke-linejoin:round}
+      .chipFill{fill:#0b1220; opacity:.08}
+      .dot{fill:#0b1220; opacity:.35}
+      .pill{fill:#0b1220; opacity:.08}
+      .bubble{fill:#ffffff; stroke:#0b1220; stroke-width:2.2}
+      .pillLabel{fill:#ffffff; stroke:#0b1220; stroke-width:2; opacity:.98}
+      .ico{stroke:#0b1220; stroke-width:2.2; fill:none; stroke-linecap:round; stroke-linejoin:round; opacity:.95}
+    </style>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f7fafc"/>
+      <stop offset="1" stop-color="#eef2ff"/>
+    </linearGradient>
+    <linearGradient id="cardA" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#e0f2fe"/>
+      <stop offset="1" stop-color="#f0f9ff"/>
+    </linearGradient>
+    <linearGradient id="cardB" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#dcfce7"/>
+      <stop offset="1" stop-color="#f0fdf4"/>
+    </linearGradient>
+    <linearGradient id="cardC" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#fff7ed"/>
+      <stop offset="1" stop-color="#fffbeb"/>
+    </linearGradient>
+    <linearGradient id="cardD" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f3e8ff"/>
+      <stop offset="1" stop-color="#faf5ff"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="#0b1220" flood-opacity="0.12"/>
+    </filter>
+    <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+      <path d="M0,0 L12,6 L0,12 Z" fill="#0b1220"/>
+    </marker>
+  </defs>
+  <rect fill="url(#bg)" style="stroke-width: 1.002; transform-box: fill-box; transform-origin: 50% 50%;" width="1600" height="916.627" x="0" ry="0" rx="0" y="0"/>
+  <g opacity="0.05" transform="matrix(1, 0, 0, 1.091501, -60, 18.430416)" style="transform-origin: 860px 440px;">
+    <path d="M60 140 H1660 M60 260 H1660 M60 380 H1660 M60 500 H1660 M60 620 H1660 M60 740 H1660" stroke="#0b1220" stroke-width="1"/>
+    <path d="M190 20 V860 M320 20 V860 M450 20 V860 M580 20 V860 M710 20 V860 M840 20 V860 M970 20 V860 M1100 20 V860 M1230 20 V860 M1360 20 V860 M1490 20 V860 M1620 20 V860" stroke="#0b1220" stroke-width="1"/>
+  </g>
+  <text x="80" y="58" class="tTitle" style="white-space: pre; transform-box: fill-box; transform-origin: 50% 50%;" transform="matrix(1.078475, 0, 0, 1.036559, -48.263153, -19.418072)">Sampling + Analysis Pipeline</text>
+  <text x="80" y="86" class="tSub" style="white-space: pre; transform-box: fill-box; transform-origin: 50% 50%;" transform="matrix(0.948586, 0, 0, 1.305681, -81.883354, -17.530947)">ADS1115 → Sampler (128 Hz) → Lock-Free SPSC → Batch Consumer → Welford → Breath → LED Worker</text>
+  <g filter="url(#shadow)" transform="matrix(1, 0, 0, 1.00318003, -60, -19.3401444)" style="transform-origin: 270px 227.5px;">
+    <rect x="110" y="140" width="320" height="175" rx="18" fill="url(#cardA)" class="stroke"/>
+    <rect x="132" y="162" width="56" height="56" rx="14" class="pill"/>
+    <path class="ico" d="M145 202 C155 192,165 192,175 202 C185 212,195 212,205 202"/>
+    <path class="ico" d="M145 182 C155 172,165 172,175 182 C185 192,195 192,205 182"/>
+    <circle class="dot" cx="145" cy="182" r="3"/>
+    <circle class="dot" cx="205" cy="202" r="3"/>
+    <g transform="translate(210,182)">
+      <text class="tTitle" x="0" y="0" dominant-baseline="middle" style="white-space: pre;">Sampler</text>
+      <text class="tTitle" x="0" y="30" dominant-baseline="middle" style="white-space: pre;">Thread</text>
+      <text class="mono" x="0" y="62" dominant-baseline="middle" style="white-space: pre;" transform="matrix(1.151451, 0, 0, 1.36306, 5.771159, -21.390228)">(128 Hz)</text>
+      <text class="tSmall" x="0" y="96" dominant-baseline="middle" style="white-space: pre;">Reads ADC, timestamps</text>
+      <text class="tSmall" x="0" y="114" dominant-baseline="middle" style="white-space: pre;">and pushes samples</text>
+    </g>
+  </g>
+  <g filter="url(#shadow)" transform="matrix(1, 0, 0, 1.00318003, -60, -19.3401444)" style="transform-origin: 800px 227.5px;">
+    <rect x="620" y="140" width="360" height="175" rx="18" fill="url(#cardB)" class="stroke"/>
+    <rect x="642" y="162" width="56" height="56" rx="14" class="pill"/>
+    <path class="ico" d="M652 182 H688"/>
+    <path class="ico" d="M652 195 H688"/>
+    <path class="ico" d="M652 208 H688"/>
+    <rect x="650" y="176" width="40" height="40" rx="7" class="chipFill"/>
+    <g transform="translate(720,182)">
+      <text class="tTitle" x="0" y="0" dominant-baseline="middle" style="white-space: pre;">Lock-Free</text>
+      <text class="tTitle" x="0" y="30" dominant-baseline="middle" style="white-space: pre;">SPSC Buffer</text>
+      <text class="mono" x="0" y="62" dominant-baseline="middle" style="white-space: pre;" transform="matrix(1.165235, 0, 0, 1.36306, 0, -19.232904)">(4096 elem)</text>
+      <text class="tSmall" x="0" y="96" dominant-baseline="middle" style="white-space: pre;">Single-producer /</text>
+      <text class="tSmall" x="0" y="114" dominant-baseline="middle" style="white-space: pre;">single-consumer ring</text>
+    </g>
+  </g>
+  <g filter="url(#shadow)" transform="matrix(1, 0, 0, 1.00318003, -60, -19.3401444)" style="transform-origin: 1350px 227.5px;">
+    <rect x="1170" y="140" width="360" height="175" rx="18" fill="url(#cardC)" class="stroke"/>
+    <rect x="1192" y="162" width="56" height="56" rx="14" class="pill"/>
+    <path class="ico" d="M1202 208 H1238"/>
+    <path class="ico" d="M1202 192 H1238"/>
+    <path class="ico" d="M1202 176 H1238"/>
+    <path class="ico" d="M1250 176 V208"/>
+    <path class="ico" d="M1250 176 H1262"/>
+    <path class="ico" d="M1250 192 H1262"/>
+    <path class="ico" d="M1250 208 H1262"/>
+    <g transform="translate(1270,182)">
+      <text class="tTitle" x="0" y="0" dominant-baseline="middle" style="white-space: pre;">Consumer</text>
+      <text class="tTitle" x="0" y="30" dominant-baseline="middle" style="white-space: pre;">Thread</text>
+      <text class="mono" x="0" y="62" dominant-baseline="middle" style="white-space: pre;">(Batch)</text>
+      <text class="tSmall" x="0" y="96" dominant-baseline="middle" style="white-space: pre;">Pops N samples</text>
+      <text class="tSmall" x="0" y="114" dominant-baseline="middle" style="white-space: pre;">processes in chunks</text>
+    </g>
+  </g>
+  <path class="wire" d="M 370 208.662 L 560 208.662" marker-end="url(#arrow)" style="transform-box: fill-box; transform-origin: 50% 50%; stroke-width: 3.606;"/>
+  <path class="wire" d="M 920.001 208.662 L 1110 208.662" marker-end="url(#arrow)" style="transform-box: fill-box; transform-origin: 50% 50%; stroke-width: 3.606;"/>
+  <g transform="matrix(1, 0, 0, 1.00318003, -60, -19.44031525)" style="transform-origin: 525px 196px;">
+    <rect x="486" y="182" width="78" height="28" rx="12" class="pillLabel" filter="url(#shadow)"/>
+    <text x="525" y="196" class="tHint" text-anchor="middle" dominant-baseline="middle" style="white-space: pre;">push()</text>
+  </g>
+  <g transform="matrix(1, 0, 0, 1.00318003, -60, -19.44031525)" style="transform-origin: 1075px 196px;">
+    <rect x="1036" y="182" width="78" height="28" rx="12" class="pillLabel" filter="url(#shadow)"/>
+    <text x="1075" y="196" class="tHint" text-anchor="middle" dominant-baseline="middle" style="white-space: pre;">pop()</text>
+  </g>
+  <rect class="bubble" filter="url(#shadow)" opacity="0.95" style="stroke-width: 2.203; transform-box: fill-box; transform-origin: 50% 50%;" x="556.307" y="315.926" width="369.123" height="54.172" rx="16" ry="0" transform="matrix(1, 0, 0, 1, -0.00003052, 0.00000191)"/>
+  <text x="890" y="352" class="tSmall" text-anchor="middle" dominant-baseline="middle" style="white-space: pre; transform-box: fill-box; transform-origin: 50% 50%;" transform="matrix(1, 0, 0, 1.00318003, -126.50883484, -18.95024295)" opacity="0.95">Lock-free contract: 1 producer + 1 consumer</text>
+  <text x="890" y="372" class="tSmall" text-anchor="middle" dominant-baseline="middle" style="white-space: pre; transform-box: fill-box; transform-origin: 50% 50%;" transform="matrix(1, 0, 0, 1.00318003, -149.00445557, -19.86471363)" opacity="0.95">(no locks, no contention)</text>
+  <g filter="url(#shadow)" transform="matrix(1, 0, 0, 1.00318003, -60.97807312, 21.55578399)" style="transform-origin: 285px 477.5px;">
+    <rect x="140" y="400" width="290" height="155" rx="18" fill="url(#cardD)" class="stroke"/>
+    <rect x="162" y="424" width="56" height="56" rx="14" class="pill"/>
+    <rect x="172" y="434" width="36" height="36" rx="8" class="chipFill"/>
+    <path class="ico" d="M172 452 H162 M208 452 H218 M190 434 V424 M190 470 V480"/>
+    <g transform="translate(235,452)">
+      <text class="tTitle" x="0" y="0" dominant-baseline="middle" style="white-space: pre;">ADS1115</text>
+      <text class="tSub" x="0" y="30" dominant-baseline="middle" style="white-space: pre;">I2C Device</text>
+      <text class="tSmall" x="0" y="66" dominant-baseline="middle" style="white-space: pre;" transform="matrix(1.158059, 0, 0, 1.226913, -10.707082, -24.941101)">Analog → Digital</text>
+      <text class="tSmall" x="0" y="86" dominant-baseline="middle" style="white-space: pre;" transform="matrix(1.137644, 0, 0, 1.18153, -7.935344, -20.275589)">(sample source)</text>
+    </g>
+  </g>
+  <path class="wire" d="M 225 426.199 L 225 295.938" marker-end="url(#arrow)" style="stroke-width: 3.606; transform-box: fill-box; transform-origin: 50% 50%;" transform="matrix(1.00000056, 0, 0, 1, -0.00014299, 0.00014299)"/>
+  <rect class="bubble" filter="url(#shadow)" opacity="0.95" style="stroke-width: 2.203; transform-box: fill-box; transform-origin: 50% 50%;" x="40" y="345.828" width="360" height="54.172" rx="16" ry="0" transform="matrix(1, 0, 0, 1, 0, 0.00000191)"/>
+  <text x="300" y="352" class="tSmall" text-anchor="middle" dominant-baseline="middle" style="white-space: pre; transform-box: fill-box; transform-origin: 50% 50%;" transform="matrix(1, 0, 0, 1.00318003, -72.17514801, 11.36996178)" opacity="0.95">Sampler runs at a fixed cadence</text>
+  <text x="300" y="372" class="tSmall" text-anchor="middle" dominant-baseline="middle" style="white-space: pre; transform-box: fill-box; transform-origin: 50% 50%;" transform="matrix(1, 0, 0, 1.00318003, -84.89007568, 10.45549111)" opacity="0.95">(timer / sleep_until)</text>
+  <g filter="url(#shadow)" transform="matrix(1, 0, 0, 1.00318003, -54.13157272, 23.59805274)" style="transform-origin: 1350px 457.5px;">
+    <rect x="1195" y="405" width="310" height="105" rx="18" fill="url(#cardB)" class="stroke"/>
+    <rect x="1217" y="429" width="46" height="46" rx="14" class="pill"/>
+    <path class="ico" d="M1253 439 H1227 L1247 452 L1227 467 H1253"/>
+    <g transform="translate(1285,449)">
+      <text class="tTitle" x="0" y="0" dominant-baseline="middle" style="white-space: pre;">Welford</text>
+      <text class="tSub" x="0" y="28" dominant-baseline="middle" style="white-space: pre;">Analyzer</text>
+    </g>
+  </g>
+  <g filter="url(#shadow)" transform="matrix(1, 0, 0, 1.00318003, -54.13157272, 20.07664561)" style="transform-origin: 1350px 627.5px;">
+    <rect x="1195" y="575" width="310" height="105" rx="18" fill="url(#cardC)" class="stroke"/>
+    <rect x="1217" y="599" width="46" height="46" rx="14" class="pill"/>
+    <path class="ico" d="M1225 629 C1235 617,1245 641,1255 629 C1265 617,1275 641,1285 629"/>
+    <g transform="translate(1285,619)">
+      <text class="tTitle" x="0" y="0" dominant-baseline="middle" style="white-space: pre;">Breath</text>
+      <text class="tSub" x="0" y="28" dominant-baseline="middle" style="white-space: pre;">Analyzer</text>
+    </g>
+  </g>
+  <g filter="url(#shadow)" transform="matrix(1, 0, 0, 1.00318003, -54.13157272, 20.58544993)" style="transform-origin: 1350px 787.5px;">
+    <rect x="1195" y="745" width="310" height="85" rx="18" fill="url(#cardA)" class="stroke"/>
+    <rect x="1217" y="767" width="46" height="46" rx="14" class="pill"/>
+    <path class="ico" d="M1240 775 V800"/>
+    <path class="ico" d="M1231 800 H1249"/>
+    <path class="ico" d="M1233 783 C1240 775,1247 775,1254 783"/>
+    <path class="ico" d="M1260 781 L1268 773"/>
+    <path class="ico" d="M1263 790 L1273 787"/>
+    <g transform="translate(1285,790)">
+      <text class="tTitle" x="0" y="0" dominant-baseline="middle" style="white-space: pre;">LED Worker</text>
+      <text class="tSub" x="185" y="0" dominant-baseline="middle" text-anchor="end" style="white-space: pre;">Thread</text>
+    </g>
+  </g>
+  <path class="wire" d="M 1295.87 300 L 1295.87 420.405" marker-end="url(#arrow)" style="stroke-width: 3.606; transform-box: fill-box; transform-origin: 50% 50%;" transform="matrix(1.00000483, 0, 0, 1, -0.00742555, 0)"/>
+  <rect class="bubble" filter="url(#shadow)" opacity="0.95" style="stroke-width: 2.203; transform-box: fill-box; transform-origin: 50% 50%;" x="1120" y="312.992" width="360" height="54.172" rx="16" ry="0" transform="matrix(1, 0, 0, 1, 0, 0.00000191)"/>
+  <text x="1360" y="352" class="tSmall" text-anchor="middle" dominant-baseline="middle" style="white-space: pre; transform-box: fill-box; transform-origin: 50% 50%;" transform="matrix(1, 0, 0, 1.00318003, -59.99996948, -18.95024295)" opacity="0.95">Batch consumer amortizes</text>
+  <text x="1360" y="372" class="tSmall" text-anchor="middle" dominant-baseline="middle" style="white-space: pre; transform-box: fill-box; transform-origin: 50% 50%;" transform="matrix(1, 0, 0, 1.00318003, -59.99999237, -18.88664241)" opacity="0.95">analysis overhead</text>
+  <path class="wire" d="M 1297.83 529.704 L 1297.83 589.894" marker-end="url(#arrow)" style="stroke-width: 3.606; transform-box: fill-box; transform-origin: 50% 50%;" transform="matrix(1.00001209, 0, 0, 1.00001934, -0.01732996, -0.00990283)"/>
+  <path class="wire" d="M 1300 700 L 1300 760.191" marker-end="url(#arrow)" style="stroke-width: 3.606; transform-box: fill-box; transform-origin: 50% 50%;" transform="matrix(1.00000484, 0, 0, 1, -0.00742687, 0)"/>
+</svg>
