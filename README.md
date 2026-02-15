@@ -115,7 +115,7 @@ Baseline (clean air) -> End Threshold (baseline + 0.02V + 2σ)
 // From config_settings.h - Tunable thresholds
 Min Blow Time: 400ms       // Reject short bursts
 Max Blow Time: 5 sec       // 5 second blowing window
-Warmup Windows: 25         // Consecutive winodws to reach baseline
+Warmup Windows: 25         // Consecutive windows to reach baseline
 Cooldown Windows: 25       // Return to ready state after sampling
 ```
 
@@ -241,7 +241,7 @@ Before doing any calibration or even running alcohol test a fresh sensor needs a
 - Connect the MQ3 sensor to 5v VCC and Gnd
 - Feel if the sensor heats up.
 - Let the sensor stay powered for 48 hours.
-- Come back and being Phase 1.
+- Come back and begin Phase 1.
 
  #### **Phase 1: Find Baseline (R₀)**
  
