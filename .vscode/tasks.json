@@ -18,6 +18,12 @@
       "type": "promptString",
       "description": "Remote repo path on the Pi",
       "default": "/home/pi/Drunk_App"
+    },
+    {
+      "id": "drunkSeverPath",
+      "type": "promptString",
+      "description": "Drunk Web Server Path",
+      "default": "/home/pi/Drunk_App/web/server"
     }
   ],
   "tasks": [
@@ -100,6 +106,26 @@
       "args": [
         "-lc",
         "ssh -i ${input:drunkPiSshKey} ${input:drunkPiHost} \"pkill -SIGTERM drunk_app; sleep 0.3; pgrep drunk_app >/dev/null && pkill -9 drunk_app || true\""
+      ],
+      "problemMatcher": []
+    },
+    {
+      "label": "Pi: Start Drunk Web Server",
+      "type": "shell",
+      "command": "bash",
+      "args": [
+        "-lc",
+        "cd ${input:drunkRemoteRepo} && rsync -az --delete --filter=\"P node_modules/***\" --exclude 'node_modules' -e \"ssh -i ${input:drunkPiSshKey}\" web/server/ ${input:drunkPiHost}:/home/pi/Drunk_App/web/server/ && ssh -i ${input:drunkPiSshKey} ${input:drunkPiHost}-- bash -lc \"hostname; cd ${drunkSeverPath} && node drunk_server.js\""
+      ],
+      "problemMatcher": []
+    },
+    {
+      "label": "Pi: Stop Drunk Web Server",
+      "type": "shell",
+      "command": "bash",
+      "args": [
+        "-lc",
+        "ssh -i ${input:drunkPiSshKey} ${input:drunkPiHost} \"pkill -f 'drunk_server\\\\.js' || true\""
       ],
       "problemMatcher": []
     }

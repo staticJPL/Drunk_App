@@ -5,6 +5,7 @@
 #include "process_runner.h"
 #include "analyzer.h"
 #include "sampler.h"
+#include "web_socket.h"
 #include <chrono>
 #include <cstdint>
 #include <cstdio>
@@ -161,11 +162,15 @@ namespace DrunkAPI
         auto& Led_indicator = SessionContext.led_ctrl;
         LedWorker led_worker(Led_indicator);
 
+        DrunkWebSocket dsocket("ws://192.168.0.64:8787");
+        static BreathAnalyzerState last_state = BreathAnalyzerState::None;
+
         auto on_breath = [&](ProcessorT& processor)
         {
             BreathEvent event{};
             while (processor.pop_breath_event(event))
             {
+                const bool changed_state = (event.State != last_state); // TODO Might need to add a reconnect check, since if node server drops we could be idling at ready or another state. So the server wont see the inital state.
                 // Map breath state
                 switch (event.State)
                 {
@@ -176,12 +181,21 @@ namespace DrunkAPI
                         std::chrono::milliseconds in_off(500);
                         led_worker.SetState(LedState::Warmup);
                         led_worker.Apply_Command({.type = LedCommandType::BlinkOne,.count=2,.on=in_on,.off=in_off});
+                        if(changed_state)
+                        {
+                            dsocket.SendSnapshot(event.State,event.end_us, event.cur_voltage,0.0, 0.0);
+                        }
                         break;
                     }
                     case BreathAnalyzerState::Ready:
+     
                         fmt::print("MQ3 Ready for analysis...\n");
                         led_worker.SetState(LedState::Ready);
                         led_worker.Apply_Command({ .type = LedCommandType::Mask, .led_mask = LedMask::M_Blue });
+                        if(changed_state)
+                        {
+                            dsocket.SendSnapshot(event.State,event.end_us, event.cur_voltage,0.0, 0.0);
+                        }
                         break;
 
                     case BreathAnalyzerState::Processing:
@@ -191,6 +205,10 @@ namespace DrunkAPI
                         std::chrono::milliseconds in_off(200);
                         led_worker.SetState(LedState::Processing);
                         led_worker.Apply_Command({.type = LedCommandType::BlinkAll,.count=3,.on=in_on,.off=in_off});
+                        if(changed_state)
+                        {
+                            dsocket.SendSnapshot(event.State,event.end_us, event.cur_voltage,0.0, 0.0);
+                        }
                         break;
                     }
 
@@ -201,6 +219,10 @@ namespace DrunkAPI
                         std::chrono::milliseconds in_off(500);
                         led_worker.SetState(LedState::Cooldown);
                         led_worker.Apply_Command({.type = LedCommandType::BlinkOne,.count=2,.on=in_on,.off=in_off,});
+                        if(changed_state)
+                        {
+                            dsocket.SendSnapshot(event.State,event.end_us, event.cur_voltage,0.0, 0.0);
+                        }
                         break;
                     }
 
@@ -224,7 +246,7 @@ namespace DrunkAPI
                             .bac = bac,
                             .bac_holdtime = std::chrono::seconds(10)
                         });
-
+                        dsocket.SendSnapshot(event.State,event.end_us, event.peak_voltage, ppm, bac);
                         break;
                     }
 
@@ -232,9 +254,12 @@ namespace DrunkAPI
                         break;
                 }
             }
+            
+            last_state = event.State;
         };
-
+        dsocket.start();
         SessionContext.runner.run(on_breath);
+        dsocket.stop();
         return 0;
     }
 }

@@ -144,7 +144,11 @@ namespace DrunkAPI
         breathresult.last_window = breathwindow;
 
         if (breathwindow.window_end_us == 0){return false;}
-
+        // Live Socket Streaming
+        out_event.cur_voltage = breathresult.last_window.mean;
+        out_event.end_us = breathresult.last_window.window_end_us;
+        // End Streaming 
+        
         if (!bWarmedup)
         {
             bFreezebaseline = false;
@@ -172,7 +176,7 @@ namespace DrunkAPI
             
             case DrunkAPI::BreathAnalyzerState::Analyzed:
                 out_event.State = BreathAnalyzerState::Analyzed;
-                out_event.peak_voltage = breathresult.peak_volts; // Set peak voltaga found
+                out_event.peak_voltage = breathresult.peak_volts; // Set peak voltage found
                 breath_state = BreathAnalyzerState::Cooldown;
                 cooldown_stable_count = 0;
                 return false;

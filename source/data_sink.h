@@ -40,7 +40,6 @@ namespace DrunkAPI
             return -1;
         }
 
-
         return newSocket;
     }
 

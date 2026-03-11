@@ -5,9 +5,13 @@
 #include <fmt/core.h>
 #include <gpiod.h>
 #include <csignal>
+#include <iterator>
+#include <string>
 #include <sys/socket.h>
 #include <unistd.h>
-//#include <atomic>
+#include <iostream>
+#include <atomic>
+
 // atomic to wrap the sigint call if main thread is concurrently processing something. Access to it can happen anytime
 // thus an atomic is used. According to my research we can use volatile std::sig_atomic_t g_sigint_count = 0; but w/e
 /* static std::atomic<int> g_sigint_count{0};
@@ -30,10 +34,10 @@ int main()
     auto s_address = DrunkAPI::ADS1115::i2c_device::SlaveAddress::ADDR_GND;
 
     // Uncomment if Calibrating
-    int status = DrunkAPI::RunSession<CalibrationProcess>(s_address);
+    //int status = DrunkAPI::RunSession<CalibrationProcess>(s_address);
 
     // Uncomment After Calibrated.
-    //int status = DrunkAPI::RunSession<RuntimeProcess>(s_address);
+    int status = DrunkAPI::RunSession<RuntimeProcess>(s_address);
 
     /*  TCP_config host_config;
         DrunkAPI::CSVNet CsvSink{host_config};

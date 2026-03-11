@@ -122,6 +122,7 @@ namespace DrunkAPI
         uint64_t start_us = 0;
         uint64_t end_us = 0;
         double peak_voltage = 0.0;
+        double cur_voltage = 0.0;
         BreathAnalyzerState State = BreathAnalyzerState::Warmup;
     };
 

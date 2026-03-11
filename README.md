@@ -487,10 +487,244 @@ const double start_threshold =
     - EWMA filtering for baseline tracking
     - Hysteresis for state transitions
     - Drift compensation
+
+# Web Tavern Interface (Real-Time Multiplayer)  
+  
+After completing the embedded breathalyzer system. I expanded the project into a **real-time multiplayer web application designed for parties and social gatherings**.
+
+I plan to host a birthday party and I expect guests connect to the same Wi-Fi network as the device and open a web page on their phone to join the **Tavern session**.
+
+Since the Raspberry Pi streams breath analysis results via my  **WebSocket** additions to a **Node.js server**  it decided to delve into web dev side of things to provide live updates to all connected browser clients.
+
+The design is simple, players can **claim a seat at the virtual tavern table** and take turns using the breathalyzer in a round robin manner. Others playing or not can watch the **live BAC readings update in real time**. Participants are free to join, switch seats, or leave whenever they like during the session.
+
+As a game programmer I thought it would be fun to create a "responsible" shared interactive experience where everyone at the party can **follow the action, track readings, and see who is currently winning (or losing) the tavern challenge** 
+
+## Demo Video 
+
+[![Tavern Demo](resources/TavernInterior.png)](resources/TavernDemo.mp4)
+
+## WebSocket Communication
+
+Real-time communication between the embedded system and the web application is handled using **WebSockets**.
+
+The embedded C++ application connects to the Node.js Tavern server using the **IXWebSocket** library.
+
+IXWebSocket provides a lightweight and portable WebSocket client implementation that works well for native C++ applications running on Linux.
+
+This connection is used to stream breathalyzer analysis results directly to the server in real time.
+
+When the breathalyzer completes an analysis cycle, the embedded application sends a **snapshot message** to the Node server.
+
+Example message produced by the C++ runtime:
+
+```cpp
+auto json = fmt::format(
+    "{{\"state\":{},\"t_us\":{},\"voltage\":{:.6f},\"ppm\":{:.6f},\"bac\":{:.6f}}}",
+    static_cast<int>(state),
+    t_us,
+    volts,
+    ppm,
+    bac
+);
+```
+  
+## Web Stack
+
+```
+Raspberry Pi (C++)
+        │
+        │ WebSocket
+        ▼
+Node.js WebSocket Server
+        │
+        │ Broadcast
+        ▼
+React + Chakra UI Client
+```
+
+The Web stack is split into client and server. Since I'm running the stack locally on my PI you'll need these dependencies.
+
+### Server
+
+- **Node.js:** v22+
+- **Package Manager:** npm
+
+The Tavern server is implemented using Node.js and handles WebSocket communication between the embedded device and browser clients.
+
+### Web Client
+
+- **Framework:** React
+- **UI Library:** Chakra UI
+- **Build Tool:** Vite
+- **Package Manager:** npm
+
+
+## Node.js Server Responsibilities
+
+The Node server acts as a **real-time session coordinator** between the embedded breathalyzer device and connected browser clients.  
+  
+Its primary role is to relay sensor data and maintain the current tavern session state.  
+  
+Responsibilities include:  
+  
+- Receiving breathalyzer **snapshot messages** from the embedded C++ application  
+- Maintaining the **current tavern session state**  
+- Broadcasting updated state to all connected clients  
+- Receiving **UI commands** from browser clients  
+- Updating seat ownership and turn order  
+- Synchronizing state across all connected players  
+  
+Example command messages received from the UI:
+
+```
+TOKEN  
+JOIN_SEAT  
+ADVANCE_TURN  
+REMOVE_SEAT  
+SNAPSHOT
+```
+
+The server acts as a **message router between the embedded breathalyzer and all connected clients**.
+
+## Tavern State
+
+The Node.js server sends a **tavern state snapshot** to sync all connected clients describing the current multiplayer session.
+
+Example payload:
+
+```json
+{
+  "type": "tavern_state",
+  "sessionActive": true,
+  "currentTurnSeatId": "top_1",
+  "seats": {
+    "top_1": {
+      "seatId": "top_1",
+      "occupied": true,
+      "ownerClientId": 1,
+      "clientToken": "dff35f24-eaf9-4e68-b427-93dc0b7294d7",
+      "name": "StaticJPL",
+      "connected": true,
+      "readingCount": 1,
+      "lastBAC": 0.03,
+      "lastPPM": 18.2,
+      "lastVoltage": 1.44,
+      "lastReadingAtUs": 1773214131953000
+    }
+  }
+}
+```
+Each seat tracks:
+- seat owner
+- player name
+- connection status
+- previous BAC reading
+- timestamp of last sample
+
+## React + Chakra UI Interface
+
+The browser interface presents a **tavern-style seating layout** where players sit around a virtual table.
+
+Users can **click on any empty chair** to claim a seat and enter a unique display name. The name can also be edited later if desired.
+
+Each browser generates a **unique client token** that is associated with the seat. This ensures that once a player claims a seat, **other clients cannot take ownership of it**, even if multiple users are connected to the session. This also ensures they can reconnect, refresh the page and go back and their seat will remain occupied.
+
+Each seat displays:
+- player name
+- BAC value
+- current turn indicator
+
+An **admin panel** is also available to help manage the session during a party. This allows the host to:  
+
+- skip the current turn  
+- manually advance the turn order  
+- adjust the tavern state if any transient edge cases occur 
+
+These controls help keep the session flowing smoothly if players leave unexpectedly or if the game state needs to be corrected.
+
+## Live BAC Streaming
+
+![Live Websocket Example](resources/Websocket.gif)
+
+When a breath sample is analyzed:
+
+1. C++ runtime emits snapshot
+2. Node server receives update
+3. message broadcast to all clients
+4. UI updates instantly
+   
+Example message produced by the embedded device:
+
+Example payload:
+
+```json
+{  
+"state": 4,  
+"t_us": 1773214131953000,  
+"voltage": 1.44,  
+"ppm": 18.2,  
+"bac": 0.03  
+}
+```
+
+## Client Tokens
+
+Each browser tab generates a **GUID client token** used by the server to track seat ownership and reconnect players.
+
+Example:
+
+`dff35f24-eaf9-4e68-b427-93dc0b7294d7`
+
+Tokens allow:
+- reconnecting clients
+- seat ownership tracking
+## Running the Tavern System
+
+The Tavern system consists of **three independent processes**.
+### 1. Start the Node Tavern Server
+
+cd web/server  
+node drunk_server.js
+
+This server manages:
+
+- multiplayer sessions
+- seat assignments
+- WebSocket routing
+
+### 2. Start the Embedded Breathalyzer
+
+./drunk_app
+
+The embedded application connects to the Node server and streams breath analysis snapshots.
+
+### 3. Start the React Client
+
+cd web/client  
+npm install  
+npm run dev
+
+Open the UI in a browser to join the Tavern session.
+
+## System Startup Order
+
+1. Node.js Tavern Server  
+2. Embedded Breathalyzer  
+3. React Client UI
+
+## Result
+Once running, players can:
+
+- join seats around the tavern table
+- take turns blowing into the sensor
+- see live state of the breath analyzer device, including the BAC readings in order of a seated client. 
+
 ## 🔬 Future Enhancements
 
-- Add real sample data set for simulation
-- Web socket to stream to a webserver. 
+- Add real sample data set for a real simulation
+- Maybe do something crazy with three.js with a real game?
+
 ## 📖 References
 
 ### Datasheets & Specifications
@@ -505,10 +739,17 @@ const double start_threshold =
 - [Welford's Online Algorithm](https://en.wikipedia.org/wiki/Algorithms_for_calculating_variance#Welford's_online_algorithm)
 - [C++ Memory Ordering](https://en.cppreference.com/w/cpp/atomic/memory_order)
 - [Lock-Free Programming](https://preshing.com/20120612/an-introduction-to-lock-free-programming/)
+
+### Web Technologies
+- [Node.js](https://nodejs.org/)
+- [React](https://react.dev/)
+- [Chakra UI](https://chakra-ui.com/)
+
 ### Inspiration
 
 - Built as a learning project to understand C++20 and embedded systems
 - No production use intended - for educational purposes only
+
 ## ⚠️ Disclaimer
 
 **This device is for educational purposes only and should NOT be used for:**
