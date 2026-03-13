@@ -494,9 +494,9 @@ After completing the embedded breathalyzer system. I expanded the project into a
 
 I plan to host a birthday party and I expect guests connect to the same Wi-Fi network as the device and open a web page on their phone to join the **Tavern session**.
 
-Since the Raspberry Pi streams breath analysis results via my  **WebSocket** additions to a **Node.js server**  it decided to delve into web dev side of things to provide live updates to all connected browser clients.
+Since the Raspberry Pi streams breath analysis results via my  **WebSocket** to a **Node.js server**  I decided to delve into web dev side of things and expose the results via live updates to a connected browser client.
 
-The design is simple, players can **claim a seat at the virtual tavern table** and take turns using the breathalyzer in a round robin manner. Others playing or not can watch the **live BAC readings update in real time**. Participants are free to join, switch seats, or leave whenever they like during the session.
+Simply put, players can **claim a seat at the virtual tavern table** and take turns using the breathalyzer in a round robin manner. Others playing or not can watch the **live BAC readings update in real time**. Participants are free to join, switch seats, or leave whenever they like during the session.
 
 As a game programmer I thought it would be fun to create a "responsible" shared interactive experience where everyone at the party can **follow the action, track readings, and see who is currently winning (or losing) the tavern challenge** 
 
